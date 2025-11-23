@@ -32,10 +32,9 @@ export const transactionAction = async ({ request }: any) => {
       const newTransaction = {
         title: formData.get("title"),
         amount: +formData.get("amount"),
-        category: formData.get("category"),
+        category: { id: +formData.get("category") }, // Преобразуем в объект
         type: formData.get("type"),
       };
-      console.log("Sending transaction:", newTransaction); // Для отладки
       await instance.post("/transactions", newTransaction);
       toast.success("Transaction added successfully");
       return null;

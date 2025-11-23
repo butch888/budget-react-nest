@@ -2,14 +2,8 @@ import { createBrowserRouter } from "react-router-dom";
 import Layout from "../pages/Layout";
 import ErrorPage from "../pages/ErrorPage";
 import Home from "../pages/Home";
-import Transactions, {
-  transactionAction,
-  transactionLoader,
-} from "../pages/Transactions";
-import Categories, {
-  categoriesAction,
-  categoriesLoader,
-} from "../pages/Categories";
+import Transactions, { transactionAction, transactionLoader } from "../pages/Transactions";
+import Categories, { categoriesAction, categoriesLoader } from "../pages/Categories";
 import Auth from "../pages/Auth";
 import { ProtectedRoute } from "../components/ProtectedRoute";
 
@@ -24,7 +18,7 @@ export const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "/transactions",
+        path: "transactions", // Убрал слеш в начале
         loader: transactionLoader,
         action: transactionAction,
         element: (
@@ -34,7 +28,7 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "/categories",
+        path: "categories", // Убрал слеш в начале
         action: categoriesAction,
         loader: categoriesLoader,
         element: (
@@ -44,7 +38,7 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "/auth",
+        path: "auth", // Убрал слеш в начале
         element: <Auth />,
       },
     ],

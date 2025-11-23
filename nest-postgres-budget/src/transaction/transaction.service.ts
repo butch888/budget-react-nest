@@ -1,29 +1,42 @@
-import { Injectable } from '@nestjs/common'
+import { Injectable, NotFoundException } from '@nestjs/common'
 import { CreateTransactionDto } from './dto/create-transaction.dto'
 import { UpdateTransactionDto } from './dto/update-transaction.dto'
 import { InjectRepository } from '@nestjs/typeorm'
 import { Transaction } from './entities/transaction.entity'
 import { Repository } from 'typeorm'
+import { Category } from '../category/entities/category.entity'
 
 @Injectable()
 export class TransactionService {
   constructor(
     @InjectRepository(Transaction)
     private readonly transactionRepository: Repository<Transaction>,
+    @InjectRepository(Category)
+    private readonly categoryRepository: Repository<Category>,
   ) {}
+
   async create(createTransactionDto: CreateTransactionDto, id: number) {
+    // Находим категорию по ID из объекта category
+    const category = await this.categoryRepository.findOne({
+      where: { id: createTransactionDto.category.id },
+    })
+
+    if (!category) {
+      throw new NotFoundException('Category not found')
+    }
+
     const newTransaction = {
       title: createTransactionDto.title,
       amount: createTransactionDto.amount,
       type: createTransactionDto.type,
-      category: { id: +createTransactionDto.category },
+      category: category, // Используем найденную категорию
       user: { id },
     }
 
-    if (!newTransaction) throw new Error('Transaction not created')
     return await this.transactionRepository.save(newTransaction)
   }
 
+  // остальные методы остаются без изменений
   async findAll(id: number) {
     const transactions = await this.transactionRepository.find({
       where: {
@@ -69,6 +82,9 @@ export class TransactionService {
     const transactions = await this.transactionRepository.find({
       where: {
         user: { id },
+      },
+      relations: {
+        category: true, // Отображение категорий
       },
       order: { createdAt: 'DESC' },
       skip: (page - 1) * limit,

@@ -11,7 +11,7 @@ export class CreateTransactionDto {
   amount: number
 
   @IsString()
-  @MinLength(6)
+  // @MinLength(6)
   type: 'expense' | 'income'
 
   @IsNotEmpty()
