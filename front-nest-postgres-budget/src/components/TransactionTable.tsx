@@ -108,8 +108,8 @@ const TransactionTable = ({ limit = 7 }: ITransactionsTable) => {
                           </svg>
                         )}
                         {transaction.type === "income"
-                          ? `+${formatToUSDT.format(transaction.amount)}`
-                          : `-${formatToUSDT.format(transaction.amount)}`}
+                          ? `${formatToUSDT.format(transaction.amount)}`
+                          : `${formatToUSDT.format(transaction.amount)}`}
                       </div>
                     </td>
                     <td className="p-4">
